@@ -1,5 +1,5 @@
 
-import pruning as prn
+from . import prune as prn
 import torch.nn as nn
 
 class DG_Pruner():
