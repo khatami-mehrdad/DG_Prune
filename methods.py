@@ -12,14 +12,16 @@ class ImportanceHook():
     def set_mask(self, mask):
         self.module.set_mask( mask )
 
+    def apply_mask_to_weight(self, mask):
+        with torch.no_grad():   # setting the weights to 0
+            self.module.org_module.weight[mask == 0] = 0 
+
     def apply_importance_thr(self, thr_val : float):
         self.set_mask( self.compute_imp_mask_thr(thr_val) )
 
     def apply_growth_thr(self, thr_val : float): # new mask is added to the old : or_mask
         growth_mask = self.compute_growth_mask_thr(thr_val)
         self.module.or_mask( growth_mask )
-        with torch.no_grad():   # setting the weights of new growth to 0
-            self.module.org_module.weight[growth_mask == 1] = 0 
 
     def get_importance_flat(self):
         return torch.flatten( self.get_importance() ) 
