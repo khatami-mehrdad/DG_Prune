@@ -71,6 +71,9 @@ def apply_pruning_step(epoch: float, pruners: dict, hooks: dict):
                 if (curr_grow[name] > 0):
                     hooks[name].apply_growth( curr_grow[name] )
 
+def apply_mask_to_weight(hooks: dict):
+    for h in hooks.values():
+        h.apply_mask_to_weight( h.module.mask )
 
 #############################################
 ## Computing Imortance & Applying Sparsity mask
