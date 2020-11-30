@@ -17,7 +17,7 @@ class PrunerBase():
         self.stage_cnt = (epoch - self.opt['starting_epoch']) // self.opt['frequency']
 
     def prune_step(self, final_sparsity: float):
-        return 0
+        return final_sparsity
 
     def grow_step(self, initial_grow: float):
         return 0
