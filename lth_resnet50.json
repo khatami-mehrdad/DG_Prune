@@ -1,10 +1,9 @@
 {
     "Pruner0": 
     {
-        "class": "PrunerBase",
-        "starting_epoch": 80,
-        "ending_epoch": 80,
-        "frequency": 1,
+        "class": "LTH",
+        "rewind_epoch": 0.5,
+        "num_stages": 5,
         "weights": {
             "layer1.0.conv2": 0.5,
             "layer1.0.conv3": 0.6,
