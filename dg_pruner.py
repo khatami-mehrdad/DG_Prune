@@ -1,6 +1,8 @@
 
 from . import prune as prn
 import torch.nn as nn
+import copy
+from collections import OrderedDict
 
 class DG_Pruner():
     def __init__(self):
@@ -57,3 +59,18 @@ class DG_Pruner():
 
     def num_iter_per_update(self, num_batch_per_epoch : int) -> int:
         return round( self.pruners[list(self.pruners)[0]].opt['frequency'] * num_batch_per_epoch )
+
+    def rewind_epoch(self, total_epochs : int) -> int:
+        return round( self.pruners[list(self.pruners)[0]].opt['rewind_epoch'] * total_epochs )
+
+    def save_rewind_checkpoint(self, checkpoint:dict):
+        self.rewind_checkpoint = copy.deepcopy(checkpoint)
+    
+    def save_final_checkpoint(self, checkpoint:dict):
+        self.final_checkpoint = copy.deepcopy(checkpoint)
+
+    def rewind_masked_checkpoint(self) -> dict:
+        for k in self.rewind_checkpoint['model'].keys():
+            if k.endswith('mask'):
+                self.rewind_checkpoint['model'][k] = self.final_checkpoint['model'][k]
+        return self.rewind_checkpoint

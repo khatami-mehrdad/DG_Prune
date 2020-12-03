@@ -8,7 +8,11 @@ def pruner_factory(classname):
 class PrunerBase():
     def __init__(self, opt : dict):
         self.opt = opt
-        self.num_stages = (opt['ending_epoch'] - opt['starting_epoch']) // opt['frequency']        
+        if ('ending_epoch' in opt) and ('starting_epoch' in opt) and ('frequency' in opt):
+            self.num_stages = (opt['ending_epoch'] - opt['starting_epoch']) // opt['frequency']        
+        elif 'num_stages' in opt:
+            self.num_stages = opt['num_stages']
+
         self.curr_sparsity = {key:0.0 for key in opt['weights'].keys()}
         self.curr_grow = {key:0.0 for key in opt['weights'].keys()}
         self.stage_cnt = 0
@@ -55,3 +59,16 @@ class RigL(PrunerBase):
     def grow_step(self):
         val =  self.opt['alpha'] * ( (1 + math.cos(self.stage_cnt * math.pi / self.num_stages)) / 2 )
         return val
+
+class LTH(PrunerBase):
+    r"""
+    https://arxiv.org/pdf/2003.02389.pdf
+    """
+    def __init__(self, opt : dict):
+        super().__init__(opt)
+
+    def prune_step(self, final_sparsity: float):
+        return final_sparsity * self.stage_cnt / self.num_stages
+
+    def compute_stage_cnt(self, epoch : float):
+        self.stage_cnt = self.stage_cnt + 1
