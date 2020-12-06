@@ -23,7 +23,7 @@ class PrunerBase():
     def prune_step(self, final_sparsity: float):
         return final_sparsity
 
-    def grow_step(self, initial_grow: float):
+    def grow_step(self):
         return 0
 
     def step_all(self, epoch: float):
