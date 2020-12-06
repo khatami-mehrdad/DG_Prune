@@ -63,6 +63,9 @@ class DG_Pruner():
     def rewind_epoch(self, total_epochs : int) -> int:
         return round( self.pruners[list(self.pruners)[0]].opt['rewind_epoch'] * total_epochs )
 
+    def num_stages(self) -> int:
+        return self.pruners[list(self.pruners)[0]].num_stages
+
     def save_rewind_checkpoint(self, checkpoint:dict):
         self.rewind_checkpoint = copy.deepcopy(checkpoint)
     
