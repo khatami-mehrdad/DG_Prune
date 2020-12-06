@@ -68,7 +68,7 @@ class LTH(PrunerBase):
         super().__init__(opt)
 
     def prune_step(self, final_sparsity: float):
-        return final_sparsity * self.stage_cnt / self.num_stages
+        return final_sparsity * ( (1 - math.pow(2, -self.stage_cnt)) if self.stage_cnt < self.num_stages else 1 ) 
 
     def compute_stage_cnt(self, epoch : float):
         self.stage_cnt = self.stage_cnt + 1
