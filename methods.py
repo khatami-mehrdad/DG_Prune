@@ -137,7 +137,7 @@ class RigLImportance(ImportanceHook):
         # new_growth[new_growth == float("Inf")] = 0
         # new_growth[new_growth == float("NaN")] = 0
         # self.growth += new_growth
-        self.growth = grad if (self.count == 0) else ( self.growth * (1 - self.ema_alpha) + grad * self.ema_alpha )
+        self.growth = grad if (self.count == 0) else ( self.growth * self.ema_alpha + grad * (1 - self.ema_alpha) )
         self.count += 1
 
     

@@ -32,6 +32,9 @@ class DG_Pruner():
     def apply_pruning_step(self, epoch: float):
         prn.apply_pruning_step(epoch, self.pruners, self.hooks)
 
+    def apply_mask_to_weight(self):
+        prn.apply_mask_to_weight(self.hooks)
+
     def dump_importance_stat(self, output_dir : str = '', epoch : int = 0):
         prn.dump_importance_stat(self.hooks, output_dir, epoch)
 
@@ -59,6 +62,9 @@ class DG_Pruner():
 
     def rewind_epoch(self, total_epochs : int) -> int:
         return round( self.pruners[list(self.pruners)[0]].opt['rewind_epoch'] * total_epochs )
+
+    def num_stages(self) -> int:
+        return self.pruners[list(self.pruners)[0]].num_stages
 
     def save_rewind_checkpoint(self, checkpoint:dict):
         self.rewind_checkpoint = copy.deepcopy(checkpoint)

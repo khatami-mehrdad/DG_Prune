@@ -3,8 +3,8 @@
     {
         "class": "RigL",
         "starting_epoch": 0,
-        "ending_epoch": 300,
-        "frequency": 0.5,
+        "ending_epoch": 150,
+        "frequency": 0.3,
         "alpha": 0.3,
         "weights": {
             "layer1.0.conv2": 0.5,
