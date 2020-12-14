@@ -72,8 +72,8 @@ class DG_Pruner():
     def save_final_checkpoint(self, checkpoint:dict):
         self.final_checkpoint = copy.deepcopy(checkpoint)
 
-    def rewind_masked_checkpoint(self) -> dict:
-        for k in self.rewind_checkpoint['model'].keys():
+    def rewind_masked_checkpoint(self, state_dict: str) -> dict:
+        for k in self.rewind_checkpoint[state_dict].keys():
             if k.endswith('mask'):
-                self.rewind_checkpoint['model'][k] = self.final_checkpoint['model'][k]
+                self.rewind_checkpoint[state_dict][k] = self.final_checkpoint[state_dict][k]
         return self.rewind_checkpoint
