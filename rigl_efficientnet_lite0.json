@@ -1,0 +1,46 @@
+{
+    "Pruner0": 
+    {
+        "class": "RigL",
+        "starting_epoch": 10,
+        "ending_epoch": 200,
+        "frequency": 0.3,
+        "alpha": 0.3,
+        "weights": 
+        {
+            "blocks.0.0.conv_pw": 0.5,
+            "blocks.1.0.conv_pw": 0.5,
+            "blocks.1.0.conv_pwl": 0.5,
+            "blocks.1.1.conv_pw": 0.5,
+            "blocks.1.1.conv_pwl": 0.5,
+            "blocks.2.0.conv_pw": 0.5,
+            "blocks.2.0.conv_pwl": 0.5,
+            "blocks.2.1.conv_pw": 0.5,
+            "blocks.2.1.conv_pwl": 0.5,
+            "blocks.3.0.conv_pw": 0.5,
+            "blocks.3.0.conv_pwl": 0.5,
+            "blocks.3.1.conv_pw": 0.5,
+            "blocks.3.1.conv_pwl": 0.5,
+            "blocks.3.2.conv_pw": 0.5,
+            "blocks.3.2.conv_pwl": 0.5,
+            "blocks.4.0.conv_pw": 0.5,
+            "blocks.4.0.conv_pwl": 0.5,
+            "blocks.4.1.conv_pw": 0.5,
+            "blocks.4.1.conv_pwl": 0.5,
+            "blocks.4.2.conv_pw": 0.5,
+            "blocks.4.2.conv_pwl": 0.5,
+            "blocks.5.0.conv_pw": 0.5,
+            "blocks.5.0.conv_pwl": 0.5,
+            "blocks.5.1.conv_pw": 0.5,
+            "blocks.5.1.conv_pwl": 0.5,
+            "blocks.5.2.conv_pw": 0.5,
+            "blocks.5.2.conv_pwl": 0.5,
+            "blocks.5.3.conv_pw": 0.5,
+            "blocks.5.3.conv_pwl": 0.5,
+            "blocks.6.0.conv_pw": 0.5,
+            "blocks.6.0.conv_pwl": 0.5,
+            "conv_head": 0.5,
+            "classifier": 0.5
+        }
+    }
+}
