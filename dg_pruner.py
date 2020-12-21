@@ -47,7 +47,7 @@ class DG_Pruner():
 
     @staticmethod
     def dump_json(data: dict, file_name : str, output_dir : str = ''):
-        prn.dump_json(data, file_name, output_dirs)
+        prn.dump_json(data, file_name, output_dir)
 
     def compute_sparsity_table_from_layer(self, layer_name : str, sparsity : float):
         return prn.compute_sparsity_table_from_layer(self.hooks, layer_name, sparsity)
