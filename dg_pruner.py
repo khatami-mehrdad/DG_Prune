@@ -14,7 +14,8 @@ class DG_Pruner():
         return prn.swap_prunable_modules(model)
 
     @staticmethod
-    def strip_prunable_modules(model : nn.Module):
+    def strip_prunable_modules(old_model : nn.Module):
+        model = copy.deepcopy(old_model)
         return prn.strip_prunable_modules(model)
 
     def add_custom_pruning(self, model : nn.Module, custom_class, parent_name : str = ''):
