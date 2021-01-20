@@ -29,6 +29,15 @@ def swap_prunable_modules(model : nn.Module):
 
     return model
 
+def strip_prunable_modules(model : nn.Module):
+    for child_name, child in model.named_children():
+        if isinstance(child, PrunableModule):
+            setattr(model, child_name, child.org_module)
+        else:
+            strip_prunable_modules(child)
+
+    return model
+
 def add_custom_pruning(model : nn.Module, custom_class, parent_name : str = ''):
     hook_dict = {}
     for child_name, child in model.named_children():

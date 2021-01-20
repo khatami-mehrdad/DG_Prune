@@ -12,7 +12,11 @@ class DG_Pruner():
     @staticmethod
     def swap_prunable_modules(model : nn.Module):
         return prn.swap_prunable_modules(model)
-    
+
+    @staticmethod
+    def strip_prunable_modules(model : nn.Module):
+        return prn.strip_prunable_modules(model)
+
     def add_custom_pruning(self, model : nn.Module, custom_class, parent_name : str = ''):
         self.hooks = prn.add_custom_pruning(model, custom_class, parent_name)
         return self.hooks
