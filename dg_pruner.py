@@ -66,7 +66,7 @@ class DG_Pruner():
         return round( self.pruners[list(self.pruners)[0]].opt['frequency'] * num_batch_per_epoch )
 
     def rewind_epoch(self, total_epochs : int) -> int:
-        return round( self.pruners[list(self.pruners)[0]].opt['rewind_epoch'] * total_epochs )
+        return int( self.pruners[list(self.pruners)[0]].opt['rewind_epoch'] * total_epochs )
 
     def num_stages(self) -> int:
         return self.pruners[list(self.pruners)[0]].num_stages
