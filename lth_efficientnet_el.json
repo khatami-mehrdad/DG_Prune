@@ -6,11 +6,11 @@
         "num_stages": 5,
         "weights": 
         {
-            "conv_stem": 0.7,
-            "blocks.0.0.conv_exp": 0.7,
-            "blocks.0.0.conv_pwl": 0.7,
-            "blocks.0.1.conv_exp": 0.7,
-            "blocks.0.1.conv_pwl": 0.7,
+            "conv_stem": 0.0,
+            "blocks.0.0.conv_exp": 0.0,
+            "blocks.0.0.conv_pwl": 0.0,
+            "blocks.0.1.conv_exp": 0.0,
+            "blocks.0.1.conv_pwl": 0.0,
             "blocks.1.0.conv_exp": 0.7,
             "blocks.1.0.conv_pwl": 0.7,
             "blocks.1.1.conv_exp": 0.7,
@@ -62,7 +62,7 @@
             "blocks.5.2.conv_pw": 0.7,
             "blocks.5.2.conv_pwl": 0.7,
             "conv_head": 0.7,
-            "classifier": 0.0
+            "classifier": 0.0        
         }
     }
 }
