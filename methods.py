@@ -2,7 +2,7 @@
 import math
 import torch
 from .modules import PrunableModule, PrunableLinear, PrunableConv2d
-
+from torch.nn.utils.fusion import fuse_conv_bn_eval
 class ImportanceHook():
     def __init__(self, module: PrunableModule):
         self.module = module
@@ -124,7 +124,11 @@ class MagnitudeImportance(ImportanceHook):
         super().__init__(module)
              
     def get_importance(self):
-        return torch.abs( self.module.org_module.weight * self.module.mask )
+        if self.module.bn_module:
+            fused_conv = fuse_conv_bn_eval(self.module.org_module, self.module.bn_module)
+        else:
+            fused_conv = self.module.org_module
+        return torch.abs( fused_conv.weight * self.module.mask )
 
 class RigLImportance(ImportanceHook):
     def __init__(self, module: PrunableModule):
