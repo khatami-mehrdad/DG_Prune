@@ -9,9 +9,9 @@ class Fuse_Hook():
         self.fuse_list = fuse_type_list
         self.module_names = [[] * len(fuse_type_list)]
         self.fuse_stage = [0] * len(fuse_type_list)
-        for name, m in model.named_modules():
-            m.register_forward_hook(self.hook_fn)
-            m.name = name
+        self.hook_handles = []
+        for m in model.modules():
+            self.hook_handles.append( m.register_forward_hook(self.hook_fn) )
     
     def CheckFuse(self, module):
         for f in range( len(self.fuse_list) ):
@@ -31,3 +31,7 @@ class Fuse_Hook():
 
     def hook_fn(self, module, input, output):
         self.CheckFuse(module)
+
+    def remove(self)
+        for h in self.hook_handles:
+            h.remove()
