@@ -38,6 +38,7 @@ class PrunableModule(nn.Module):
             raise ValueError('Prunable Module of {} is not allowed'.type(org_module))
 
         self.org_module = org_module
+        self.bn_module = None
         self.register_buffer('mask', torch.ones_like(self.org_module.weight, dtype=torch.int8)) # bool has issues in AMP
 
     def set_mask(self, new_mask):
@@ -48,7 +49,9 @@ class PrunableModule(nn.Module):
         self.mask[self.mask > 1] = 1
         # if ( torch.sum(self.mask > 1).item() > 0 ):
         #     raise ValueError('mask cannot be more than 1')
-        
+    
+    def set_bn(self, bn: nn.BatchNorm2d):
+        self.bn_module = bn
 
     def forward(self, input):
         pass
