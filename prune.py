@@ -14,6 +14,14 @@ from .pruners import pruner_factory
 def get_prefix(prefix):
     return prefix if prefix == "" else prefix + '.'
 
+# Generalization of getattr
+def get_module(model : nn.Module, submodule_key : str):
+    tokens = submodule_key.split('.')
+    cur_mod = model
+    for s in tokens:
+        cur_mod = getattr(cur_mod, s)
+    return cur_mod
+
 def reset_importance(hooks : dict):
     for h in hooks.values():
         h.reset_importance()
@@ -37,6 +45,13 @@ def strip_prunable_modules(model : nn.Module):
             strip_prunable_modules(child)
 
     return model
+
+def attach_bn_to_prunables(model : nn.Module, fuse_list : list):
+    for module_name in fuse_list:
+        prunable_conv = get_module(model, module_name[0])
+        bn = get_module(model, module_name[1])
+        if isinstance(prunable_conv, PrunableConv2d):
+            prunable_conv.set_bn(bn)
 
 def add_custom_pruning(model : nn.Module, custom_class, parent_name : str = ''):
     hook_dict = {}

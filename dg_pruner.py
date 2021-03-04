@@ -18,6 +18,10 @@ class DG_Pruner():
         model = copy.deepcopy(old_model)
         return prn.strip_prunable_modules(model)
 
+    @staticmethod
+    def attach_bn_to_prunables(model : nn.Module, fuse_list : list):
+        prn.attach_bn_to_prunables(model, fuse_list)
+
     def add_custom_pruning(self, model : nn.Module, custom_class, parent_name : str = ''):
         self.hooks = prn.add_custom_pruning(model, custom_class, parent_name)
         return self.hooks

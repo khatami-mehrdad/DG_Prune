@@ -10,9 +10,10 @@ class Fuse_Hook():
         self.module_names = [[] * len(fuse_type_list)]
         self.fuse_stage = [0] * len(fuse_type_list)
         self.hook_handles = []
-        for m in model.modules():
+        for name, m in model.named_modules():
             self.hook_handles.append( m.register_forward_hook(self.hook_fn) )
-    
+            m.name = name
+
     def CheckFuse(self, module):
         for f in range( len(self.fuse_list) ):
             fuse_type = self.fuse_list[f]
@@ -32,6 +33,15 @@ class Fuse_Hook():
     def hook_fn(self, module, input, output):
         self.CheckFuse(module)
 
-    def remove(self)
+    def remove(self):
         for h in self.hook_handles:
             h.remove()
+
+def get_modules_to_fuse(model, fuse_type_list : list, sample_input):
+    model.to('cpu')
+    model.eval()
+    # fuse_type_list = [ [PrunableConv2d, nn.BatchNorm2d] ]
+    h = Fuse_Hook(model, fuse_type_list)
+    output_test = model( sample_input )
+    h.remove()
+    return h.modules_to_fuse
