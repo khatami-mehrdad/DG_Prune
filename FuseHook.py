@@ -7,7 +7,7 @@ class Fuse_Hook():
     def __init__(self, model, fuse_type_list : list):
         self.modules_to_fuse = []
         self.fuse_list = fuse_type_list
-        self.module_names = [] * len(fuse_type_list)
+        self.module_names = [[] * len(fuse_type_list)]
         self.fuse_stage = [0] * len(fuse_type_list)
         for name, m in model.named_modules():
             m.register_forward_hook(self.hook_fn)
