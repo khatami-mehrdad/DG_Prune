@@ -25,7 +25,7 @@ class SenseAnalyzerBase():
         return self.curr_sparsity
 
     def get_curr_layername(self):
-        return list(self.curr_sparsity)[self.layer_cnt]
+        return list(self.curr_sparsity)[self.layer_cnt] if not self.done() else 'DONE'
 
     def stage_cnt_next(self):
         self.stage_cnt = self.stage_cnt + 1
