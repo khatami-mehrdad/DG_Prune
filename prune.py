@@ -4,12 +4,11 @@ import torch
 import torch.nn as nn
 import numpy as np
 import math
-import json
-import os
 
 from .modules import PrunableConv2d, PrunableLinear, PrunableModule
 from .methods import ImportanceHook
 from .pruners import pruner_factory
+from .utils import read_json_from_file, dump_json
 
 def get_prefix(prefix):
     return prefix if prefix == "" else prefix + '.'
@@ -72,11 +71,7 @@ def pruners_from_file(file_path : str):
     for name, pruner_property in pruner_dict.items():
         pruner_obj_dict[name] = create_pruner(pruner_property)
     return pruner_obj_dict
-    
-def read_json_from_file(file_path : str):
-    with open(file_path) as f:
-        data = json.load(f)
-    return data
+
 
 def create_pruner(pruner_property):
     cls_ = pruner_factory(pruner_property["class"])
@@ -169,6 +164,3 @@ def dump_sparsity_stat(model : nn.Module, output_dir : str = '', epoch : int = 0
     sparsity_dict = get_sparsity_stat(model)
     dump_json(sparsity_dict, 'sparsity_report_epoch{}.json'.format(epoch), output_dir)
     
-def dump_json(data: dict, file_name : str, output_dir : str = ''):
-    with open(os.path.join(output_dir, file_name), 'w') as fp:
-        fp.write(json.dumps(data, indent=1))

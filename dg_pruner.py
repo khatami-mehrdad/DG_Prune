@@ -1,5 +1,6 @@
 
 from . import prune as prn
+from . import sensitivity as sense
 import torch.nn as nn
 import copy
 from collections import OrderedDict
@@ -8,6 +9,7 @@ class DG_Pruner():
     def __init__(self):
         self.hooks = {}
         self.pruners = {}
+        self.sense_analyzers = {}
 
     @staticmethod
     def swap_prunable_modules(model : nn.Module):
@@ -29,6 +31,10 @@ class DG_Pruner():
     def pruners_from_file(self, file_path : str):
         self.pruners = prn.pruners_from_file(file_path)
         return self.pruners
+
+    def sense_analyzers_from_file(self, file_path : str):
+        self.sense_analyzers = sense.sense_analyzers_from_file(file_path)
+        return self.sense_analyzers
 
     def reset_importance(self):
         for h in self.hooks.values():
