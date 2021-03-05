@@ -4,6 +4,7 @@ from . import sensitivity as sense
 import torch.nn as nn
 import copy
 from collections import OrderedDict
+import csv
 
 class DG_Pruner():
     def __init__(self):
@@ -46,6 +47,9 @@ class DG_Pruner():
 
     def apply_pruning_step(self, epoch: float):
         prn.apply_pruning_step(epoch, self.pruners, self.hooks)
+
+    def apply_sensitivity_step(self):
+        sense.apply_sensitivity_step(self.sense_analyzers, self.hooks)
 
     def apply_mask_to_weight(self):
         prn.apply_mask_to_weight(self.hooks)
@@ -92,3 +96,23 @@ class DG_Pruner():
             if k.endswith('mask'):
                 self.rewind_checkpoint[state_dict][k] = self.final_checkpoint[state_dict][k]
         return self.rewind_checkpoint
+
+    def sense_done(self) -> int:
+        return self.sense_analyzers[list(self.sense_analyzers)[0]].done()
+
+    def get_sensitivity_state(self) -> OrderedDict : 
+        return self.sense_analyzers[list(self.sense_analyzers)[0]].get_sensitivity_state()
+
+    def update_summary(self, eval_metrics, filename, write_header=False):
+        rowd = OrderedDict()
+        rowd.update( self.get_sensitivity_state().items() )
+        rowd.update([('eval_' + k, v) for k, v in eval_metrics.items()])
+        with open(filename, mode='a') as cf:
+            dw = csv.DictWriter(cf, fieldnames=rowd.keys())
+            if write_header:  # first iteration (epoch == 1 can't be used)
+                dw.writeheader()
+            dw.writerow(rowd)
+
+
+
+    

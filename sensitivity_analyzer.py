@@ -1,5 +1,6 @@
 
 import math
+from collections import OrderedDict
 
 def sense_analyzers_factory(classname):
     cls = globals()[classname]
@@ -10,11 +11,11 @@ class SenseAnalyzerBase():
         self.opt = opt
         self.num_stages = opt['num_stages']
         self.curr_sparsity = {key:0.0 for key in opt['weights'].keys()}
-        self.stage_cnt = -1
+        self.stage_cnt = 0
         self.layer_cnt = 0
 
     def step(self, final_sparsity: float):
-        return final_sparsity
+        pass
 
     def step_all(self):
         self.stage_cnt_next()
@@ -24,7 +25,7 @@ class SenseAnalyzerBase():
         return self.curr_sparsity
 
     def get_curr_layername(self):
-        return self.curr_sparsity.keys()[self.layer_cnt]
+        return list(self.curr_sparsity)[self.layer_cnt]
 
     def stage_cnt_next(self):
         self.stage_cnt = self.stage_cnt + 1
@@ -36,6 +37,10 @@ class SenseAnalyzerBase():
     
     def done(self):
         return self.layer_cnt >=  len(self.curr_sparsity)
+
+    def get_sensitivity_state(self) -> OrderedDict : 
+        layer_name = self.get_curr_layername()
+        return OrderedDict([('layer', self.layer_cnt), ('layerName', layer_name), ('stage', self.stage_cnt), ('sparsity', self.curr_sparsity[layer_name])])
 
 class Linear(SenseAnalyzerBase):
     r"""

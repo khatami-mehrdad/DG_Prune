@@ -11,3 +11,11 @@ def sense_analyzers_from_file(file_path : str):
 def create_sense_analyzers(sense_analyzers_property):
     cls_ = sense_analyzers_factory(sense_analyzers_property["class"])
     return cls_(sense_analyzers_property)
+
+## Applying Sparsity
+def apply_sensitivity_step(sense_analyzers: dict, hooks: dict):
+    for sense_analyzer in sense_analyzers.values():
+        curr_sparsity = sense_analyzer.step_all()
+        if ( (sense_analyzer.stage_cnt >= 0) and (sense_analyzer.stage_cnt <= sense_analyzer.num_stages) ):
+            for name, sparsity in curr_sparsity.items():
+                hooks[name].apply_sparsity( sparsity )
