@@ -2,7 +2,7 @@
     "Sense0": 
     {
         "class": "Linear",
-        "num_stages": 3,
+        "num_stages": 9,
         "weights": {
             "conv1": 0.9,
             "layer1.0.conv1": 0.9,
