@@ -20,8 +20,9 @@ class SenseAnalyzerBase():
     def step_all(self):
         self.stage_cnt_next()
         layer_name = self.get_curr_layername()
-        final_sparsity = self.opt['weights'][layer_name]
-        self.curr_sparsity[layer_name] = self.step(final_sparsity)
+        if (layer_name != 'DONE'):
+            final_sparsity = self.opt['weights'][layer_name]
+            self.curr_sparsity[layer_name] = self.step(final_sparsity)
         return self.curr_sparsity
 
     def get_curr_layername(self):
