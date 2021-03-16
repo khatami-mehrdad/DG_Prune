@@ -1,7 +1,8 @@
 {
     "Sense0": 
     {
-        "class": "Linear",
+        "class": "Exponential",
+        "T": 2,
         "num_stages": 9,
         "weights": {
             "conv_stem": 0.9,

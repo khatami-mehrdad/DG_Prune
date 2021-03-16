@@ -59,9 +59,14 @@ class Exponential(SenseAnalyzerBase):
     """
     def __init__(self, opt : dict):
         super().__init__(opt)
+        self.T = opt['T'] if 'T' in opt.keys() else 2
+
+    # def step(self, final_sparsity: float):
+    #     mult = 0
+    #     for i in range(1, self.stage_cnt + 1):
+    #         mult += math.pow(self.T, self.num_stages - i)
+    #     return final_sparsity * mult / (math.pow(self.T, self.num_stages) - 1)
 
     def step(self, final_sparsity: float):
-        mult = 0
-        for i in range(1, self.stage_cnt + 1):
-            mult += math.pow(2, self.num_stages - i)
-        return final_sparsity * mult / (math.pow(2, self.num_stages) - 1)
+        val =  final_sparsity - final_sparsity * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.T )
+        return val
