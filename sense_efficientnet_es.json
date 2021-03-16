@@ -1,0 +1,48 @@
+{
+    "Sense0": 
+    {
+        "class": "Linear",
+        "num_stages": 9,
+        "weights": {
+            "conv_stem": 0.9,
+            "blocks.0.0.conv_exp": 0.9,
+            "blocks.0.0.conv_pwl": 0.9,
+            "blocks.1.0.conv_exp": 0.9,
+            "blocks.1.0.conv_pwl": 0.9,
+            "blocks.1.1.conv_exp": 0.9,
+            "blocks.1.1.conv_pwl": 0.9,
+            "blocks.2.0.conv_exp": 0.9,
+            "blocks.2.0.conv_pwl": 0.9,
+            "blocks.2.1.conv_exp": 0.9,
+            "blocks.2.1.conv_pwl": 0.9,
+            "blocks.2.2.conv_exp": 0.9,
+            "blocks.2.2.conv_pwl": 0.9,
+            "blocks.2.3.conv_exp": 0.9,
+            "blocks.2.3.conv_pwl": 0.9,
+            "blocks.3.0.conv_pw": 0.9,
+            "blocks.3.0.conv_pwl": 0.9,
+            "blocks.3.1.conv_pw": 0.9,
+            "blocks.3.1.conv_pwl": 0.9,
+            "blocks.3.2.conv_pw": 0.9,
+            "blocks.3.2.conv_pwl": 0.9,
+            "blocks.3.3.conv_pw": 0.9,
+            "blocks.3.3.conv_pwl": 0.9,
+            "blocks.3.4.conv_pw": 0.9,
+            "blocks.3.4.conv_pwl": 0.9,
+            "blocks.4.0.conv_pw": 0.9,
+            "blocks.4.0.conv_pwl": 0.9,
+            "blocks.4.1.conv_pw": 0.9,
+            "blocks.4.1.conv_pwl": 0.9,
+            "blocks.4.2.conv_pw": 0.9,
+            "blocks.4.2.conv_pwl": 0.9,
+            "blocks.4.3.conv_pw": 0.9,
+            "blocks.4.3.conv_pwl": 0.9,
+            "blocks.5.0.conv_pw": 0.9,
+            "blocks.5.0.conv_pwl": 0.9,
+            "blocks.5.1.conv_pw": 0.9,
+            "blocks.5.1.conv_pwl": 0.9,
+            "conv_head": 0.9,
+            "classifier": 0.9     
+        }
+    }
+}
