@@ -12,7 +12,9 @@ class ImportanceHook():
     def set_mask(self, mask):
         self.module.set_mask( mask )
 
-    def apply_mask_to_weight(self, mask):
+    def apply_mask_to_weight(self, mask = None):
+        if mask == None:
+            mask = self.module.mask
         with torch.no_grad():   # setting the weights to 0
             self.module.org_module.weight[mask == 0] = 0 
 
@@ -134,7 +136,7 @@ class RigLImportance(ImportanceHook):
     def __init__(self, module: PrunableModule):
         super().__init__(module)
         self.hook = module.org_module.weight.register_hook(self.back_hook)
-        self.ema_alpha = 0.9
+        self.ema_alpha = 0.1
           
     def back_hook(self, grad):
         # new_growth = grad
