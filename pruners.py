@@ -40,9 +40,10 @@ class AGP(PrunerBase):
     """
     def __init__(self, opt : dict):
         super().__init__(opt)
+        self.starting_sparsity = 0.4
 
     def prune_step(self, final_sparsity: float):
-        val =  final_sparsity - final_sparsity * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.opt['T'] )
+        val =  final_sparsity - (final_sparsity - self.starting_sparsity) * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.opt['T'] )
         return val
 
 
@@ -66,12 +67,17 @@ class LTH(PrunerBase):
     """
     def __init__(self, opt : dict):
         super().__init__(opt)
+        self.starting_sparsity = 0.4
+        self.exponent = 0.5
 
     def prune_step(self, final_sparsity: float):
-        mult = 0
-        for i in range(1, self.stage_cnt + 1):
-            mult += math.pow(2, self.num_stages - i)
-        return final_sparsity * mult / (math.pow(2, self.num_stages) - 1) 
+        # mult = 0
+        # for i in range(1, self.stage_cnt + 1):
+        #     mult += math.pow(2, self.num_stages - i)
+        # return final_sparsity * mult / (math.pow(2, self.num_stages) - 1) 
+
+        val =  final_sparsity - (final_sparsity - self.starting_sparsity) * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )
+        return val
 
     def compute_stage_cnt(self, epoch : float):
         self.stage_cnt = self.stage_cnt + 1

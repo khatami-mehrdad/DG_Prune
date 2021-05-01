@@ -83,8 +83,7 @@ def apply_pruning_step(epoch: float, pruners: dict, hooks: dict):
         curr_sparsity, curr_grow = pruner.step_all(epoch)
         if ( (pruner.stage_cnt >= 0) and (pruner.stage_cnt <= pruner.num_stages) ):
             for name, sparsity in curr_sparsity.items():
-                curr_mask = hooks[name].module.mask
-                hooks[name].apply_mask_to_weight( curr_mask )
+                hooks[name].apply_mask_to_weight()
                 if (sparsity > 0):
                     hooks[name].apply_sparsity( sparsity )
                 if (curr_grow[name] > 0):
