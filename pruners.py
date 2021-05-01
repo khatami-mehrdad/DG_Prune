@@ -76,7 +76,9 @@ class LTH(PrunerBase):
         #     mult += math.pow(2, self.num_stages - i)
         # return final_sparsity * mult / (math.pow(2, self.num_stages) - 1) 
 
-        val =  final_sparsity - (final_sparsity - self.starting_sparsity) * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )
+        val = final_sparsity - (final_sparsity - self.starting_sparsity) * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )
+        if (final_sparsity < self.starting_sparsity):
+            val = final_sparsity
         return val
 
     def compute_stage_cnt(self, epoch : float):
