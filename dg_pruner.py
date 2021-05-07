@@ -37,6 +37,10 @@ class DG_Pruner():
         self.sense_analyzers = sense.sense_analyzers_from_file(file_path)
         return self.sense_analyzers
 
+    def sense_analyzers_from_dict(self, sense_analyzers_dict : dict):
+        self.sense_analyzers = sense.sense_analyzers_from_dict(sense_analyzers_dict)
+        return self.sense_analyzers
+
     def reset_importance(self):
         for h in self.hooks.values():
             h.reset_importance()
@@ -63,6 +67,10 @@ class DG_Pruner():
     @staticmethod
     def dump_sparsity_stat(model : nn.Module, output_dir : str = '', epoch : int = 0):
         prn.dump_sparsity_stat(model, output_dir, epoch)
+
+    @staticmethod
+    def get_prunable_module_names(model : nn.Module, output_dir : str = ''):
+        return prn.get_prunable_module_names(model, output_dir)
 
     @staticmethod
     def dump_json(data: dict, file_name : str, output_dir : str = ''):

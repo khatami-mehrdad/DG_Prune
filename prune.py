@@ -151,6 +151,16 @@ def get_sparsity_stat(model : nn.Module, parent_name : str = ''):
             sparsity_dict.update( get_sparsity_stat(child, module_name) )
     return sparsity_dict
 
+def get_prunable_module_names(model : nn.Module, parent_name : str = ''):
+    module_names_list = []
+    for child_name, child in model.named_children():
+        module_name = get_prefix(parent_name) + child_name
+        if isinstance(child, PrunableModule):
+            module_names_list.append(module_name)
+        else:
+            module_names_list.extend( get_prunable_module_names(child, module_name) )
+    return module_names_list
+
 def dump_importance_stat(hooks : dict, output_dir : str = '', epoch : int = 0):
     imp_dict = get_importance_stat(hooks)
     dump_json(imp_dict, 'importance_report_epoch{}.json'.format(epoch), output_dir)
