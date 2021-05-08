@@ -16,7 +16,7 @@ class SenseAnalyzerBase():
         else:
             self.num_stages = (opt['final_sparsity'] - self.starting_sparsity) // opt['step_size'] + 1
             self.curr_sparsity = {key:0.0 for key in opt['layer_names']}
-        self.stage_cnt = 0
+        self.stage_cnt = -1 # -1 is for dense
         self.layer_cnt = 0
 
     def step(self, final_sparsity: float):
@@ -26,7 +26,7 @@ class SenseAnalyzerBase():
         self.stage_cnt_next()
         layer_name = self.get_curr_layername()
         if (layer_name != 'DONE'):
-            final_sparsity = self.opt['weights'][layer_name] if 'weights' in opt.keys() else opt['final_sparsity']
+            final_sparsity = self.opt['weights'][layer_name] if 'weights' in self.opt.keys() else self.opt['final_sparsity']
             self.curr_sparsity[layer_name] = self.step(final_sparsity)
         return self.curr_sparsity
 
