@@ -64,7 +64,7 @@ class PrunableConv2d(PrunableModule):
         super().__init__(org_module)
 
     def forward(self, input):
-        return self.org_module._conv_forward( input, FakePrune.apply(self.org_module.weight, self.mask) )
+        return self.org_module._conv_forward( input, FakePrune.apply(self.org_module.weight, self.mask), self.org_module.bias )
 
 class PrunableLinear(PrunableModule):
     r"""
