@@ -18,6 +18,12 @@ class ImportanceHook():
         with torch.no_grad():   # setting the weights to 0
             self.module.org_module.weight[mask == 0] = 0 
 
+    def apply_mask_to_growth(self, mask = None):
+        if mask == None:
+            mask = self.module.mask
+        with torch.no_grad():   # setting the growth to 0
+            self.growth[mask != 0] = 0 
+
     def apply_importance_thr(self, thr_val : float):
         self.set_mask( self.compute_imp_mask_thr(thr_val) )
 
@@ -156,7 +162,7 @@ class RigLImportance(ImportanceHook):
 
     def get_growth(self):
         # return torch.abs( self.module.org_module.weight if (self.count == 0) else (self.growth / self.count) ) * (self.module.mask == 0) 
-        return torch.abs( self.module.org_module.weight if (self.count == 0) else self.growth ) * (self.module.mask == 0) 
+        return torch.abs( self.module.org_module.weight if (self.count == 0) else self.growth ) # * (self.module.mask == 0) 
 
     def get_growth_no_mask(self):
         return torch.abs( self.module.org_module.weight if (self.count == 0) else self.growth )
