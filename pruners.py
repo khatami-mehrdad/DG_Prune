@@ -61,6 +61,26 @@ class RigL(PrunerBase):
         val =  self.opt['alpha'] * ( (1 + math.cos(self.stage_cnt * math.pi / self.num_stages)) / 2 )
         return val
 
+class RigL_v2(PrunerBase):
+    r"""
+    https://arxiv.org/pdf/1911.11134.pdf
+    """
+    def __init__(self, opt : dict):
+        super().__init__(opt)
+        self.exponent = opt['T'] if 'T' in opt.keys() else 1
+        self.max_growth = opt['alpha'] if 'alpha' in opt.keys() else 0.1
+
+    def prune_step(self, final_sparsity: float):
+        growth = self.grow_step()
+        return final_sparsity + growth
+    
+    def grow_step(self):
+        val = self.max_growth * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )       
+        return val
+
+    def compute_stage_cnt(self, epoch : float):
+        self.stage_cnt = self.stage_cnt + 1
+
 class LTH(PrunerBase):
     r"""
     https://arxiv.org/pdf/2003.02389.pdf

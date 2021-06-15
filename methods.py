@@ -139,11 +139,11 @@ class RigLImportance(ImportanceHook):
         self.ema_alpha = 0.1
           
     def back_hook(self, grad):
-        # new_growth = grad
-        # new_growth[new_growth == float("Inf")] = 0
-        # new_growth[new_growth == float("NaN")] = 0
-        # self.growth += new_growth
-        self.growth = grad if (self.count == 0) else ( self.growth * self.ema_alpha + grad * (1 - self.ema_alpha) )
+        new_growth = grad
+        new_growth[new_growth == float("Inf")] = 0
+        new_growth[new_growth == float("NaN")] = 0
+        # self.growth = grad if (self.count == 0) else ( self.growth * self.ema_alpha + grad * (1 - self.ema_alpha) )
+        self.growth = self.growth * (self.count / (self.count + 1)) + new_growth / (self.count + 1)
         self.count += 1
 
     
