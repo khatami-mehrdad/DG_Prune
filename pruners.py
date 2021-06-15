@@ -68,7 +68,7 @@ class RigL_v2(PrunerBase):
     def __init__(self, opt : dict):
         super().__init__(opt)
         self.exponent = opt['T'] if 'T' in opt.keys() else 1
-        self.max_growth = opt['alpha'] if 'alpha' in opt.keys() else 0.1
+        self.max_growth = opt['alpha'] if 'alpha' in opt.keys() else 0.05
 
     def prune_step(self, final_sparsity: float):
         growth = self.grow_step()
