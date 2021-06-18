@@ -2,7 +2,7 @@
     "Pruner0": 
     {
         "class": "LTH",
-        "rewind_epoch": 0.3,
+        "rewind_epoch": 1,
         "num_stages": 5,
         "weights": 
         {
