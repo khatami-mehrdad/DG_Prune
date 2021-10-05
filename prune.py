@@ -36,6 +36,15 @@ def swap_prunable_modules(model : nn.Module):
 
     return model
 
+def apply_zero_weight_to_mask(model : nn.Module):
+    for child_name, child in model.named_children():
+        if isinstance(child, PrunableModule):
+            child.apply_zero_weight_to_mask()
+        else:
+            apply_zero_weight_to_mask(child)
+
+    return model    
+
 def strip_prunable_modules(model : nn.Module):
     for child_name, child in model.named_children():
         if isinstance(child, PrunableModule):

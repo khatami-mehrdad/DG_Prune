@@ -59,6 +59,10 @@ class PrunableModule(nn.Module):
         with torch.no_grad():   # setting the weights to 0
             self.org_module.weight[mask == 0] = 0 
 
+    def apply_zero_weight_to_mask(self):
+        with torch.no_grad():   # setting the mask to 0 where weights are zero
+            self.mask[self.org_module.weight == 0] = 0 
+
     def forward(self, input):
         pass
 
