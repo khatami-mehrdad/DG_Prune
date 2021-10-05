@@ -39,6 +39,7 @@ def swap_prunable_modules(model : nn.Module):
 def strip_prunable_modules(model : nn.Module):
     for child_name, child in model.named_children():
         if isinstance(child, PrunableModule):
+            child.apply_mask_to_weight()
             setattr(model, child_name, child.org_module)
         else:
             strip_prunable_modules(child)
@@ -143,14 +144,24 @@ def get_growth_stat(hooks : dict):
             imp_dict[name] = torch.sum( h.get_growth() ).item() / torch.sum(h.module.mask == 0).item()
     return imp_dict 
 
-def get_sparsity_stat(model : nn.Module, parent_name : str = ''):
+def get_sparsity_stat_mask_base(model : nn.Module, parent_name : str = ''):
     sparsity_dict = {}
     for child_name, child in model.named_children():
         module_name = get_prefix(parent_name) + child_name
         if isinstance(child, PrunableModule):
             sparsity_dict[module_name] = 1 - ( torch.sum(child.mask).item() / child.mask.numel() )
         else:
-            sparsity_dict.update( get_sparsity_stat(child, module_name) )
+            sparsity_dict.update( get_sparsity_stat_mask_base(child, module_name) )
+    return sparsity_dict
+
+def get_sparsity_stat_weight_base(model : nn.Module, parent_name : str = ''):
+    sparsity_dict = {}
+    for child_name, child in model.named_children():
+        module_name = get_prefix(parent_name) + child_name
+        if isinstance(child, nn.Conv2d) and child.groups == 1:
+            sparsity_dict[module_name] = 1 - ( torch.sum(child.weight != 0).item() / child.weight.numel() )
+        else:
+            sparsity_dict.update( get_sparsity_stat_weight_base(child, module_name) )
     return sparsity_dict
 
 def get_prunable_module_names(model : nn.Module, parent_name : str = ''):
@@ -171,7 +182,7 @@ def dump_growth_stat(hooks : dict, output_dir : str = '', epoch : int = 0):
     growth_dict = get_growth_stat(hooks)
     dump_json(growth_dict, 'growth_report_epoch{}.json'.format(epoch), output_dir)
 
-def dump_sparsity_stat(model : nn.Module, output_dir : str = '', epoch : int = 0):
-    sparsity_dict = get_sparsity_stat(model)
+def dump_sparsity_stat_mask_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
+    sparsity_dict = get_sparsity_stat_mask_base(model)
     dump_json(sparsity_dict, 'sparsity_report_epoch{}.json'.format(epoch), output_dir)
     

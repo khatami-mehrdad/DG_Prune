@@ -65,8 +65,8 @@ class DG_Pruner():
         prn.dump_growth_stat(self.hooks, output_dir, epoch)
 
     @staticmethod
-    def dump_sparsity_stat(model : nn.Module, output_dir : str = '', epoch : int = 0):
-        prn.dump_sparsity_stat(model, output_dir, epoch)
+    def dump_sparsity_stat_mask_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
+        prn.dump_sparsity_stat_mask_base(model, output_dir, epoch)
 
     @staticmethod
     def get_prunable_module_names(model : nn.Module, output_dir : str = ''):

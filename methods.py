@@ -13,10 +13,8 @@ class ImportanceHook():
         self.module.set_mask( mask )
 
     def apply_mask_to_weight(self, mask = None):
-        if mask == None:
-            mask = self.module.mask
         with torch.no_grad():   # setting the weights to 0
-            self.module.org_module.weight[mask == 0] = 0 
+            self.module.apply_mask_to_weight(mask)
 
     def apply_mask_to_growth(self, mask = None):
         if mask == None:

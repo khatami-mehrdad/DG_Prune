@@ -53,6 +53,12 @@ class PrunableModule(nn.Module):
     def set_bn(self, bn: nn.BatchNorm2d):
         self.bn_module = bn
 
+    def apply_mask_to_weight(self, mask = None):
+        if mask == None:
+            mask = self.mask
+        with torch.no_grad():   # setting the weights to 0
+            self.org_module.weight[mask == 0] = 0 
+
     def forward(self, input):
         pass
 
