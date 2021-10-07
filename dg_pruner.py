@@ -69,6 +69,10 @@ class DG_Pruner():
         prn.dump_sparsity_stat_mask_base(model, output_dir, epoch)
 
     @staticmethod
+    def dump_sparsity_stat_weight_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
+        prn.dump_sparsity_stat_weight_base(model, output_dir, epoch)
+
+    @staticmethod
     def get_prunable_module_names(model : nn.Module, output_dir : str = ''):
         return prn.get_prunable_module_names(model, output_dir)
 

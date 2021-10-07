@@ -167,7 +167,7 @@ def get_sparsity_stat_weight_base(model : nn.Module, parent_name : str = ''):
     sparsity_dict = {}
     for child_name, child in model.named_children():
         module_name = get_prefix(parent_name) + child_name
-        if isinstance(child, nn.Conv2d) and child.groups == 1:
+        if (isinstance(child, nn.Conv2d) and child.groups == 1) or isinstance(child, nn.Linear):
             sparsity_dict[module_name] = 1 - ( torch.sum(child.weight != 0).item() / child.weight.numel() )
         else:
             sparsity_dict.update( get_sparsity_stat_weight_base(child, module_name) )
@@ -193,5 +193,8 @@ def dump_growth_stat(hooks : dict, output_dir : str = '', epoch : int = 0):
 
 def dump_sparsity_stat_mask_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
     sparsity_dict = get_sparsity_stat_mask_base(model)
-    dump_json(sparsity_dict, 'sparsity_report_epoch{}.json'.format(epoch), output_dir)
+    dump_json(sparsity_dict, 'mask_sparsity_report_epoch{}.json'.format(epoch), output_dir)
     
+def dump_sparsity_stat_weight_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
+    sparsity_dict = get_sparsity_stat_weight_base(model)
+    dump_json(sparsity_dict, 'weight_sparsity_report_epoch{}.json'.format(epoch), output_dir)
