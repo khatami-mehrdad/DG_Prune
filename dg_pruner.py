@@ -58,6 +58,10 @@ class DG_Pruner():
     def apply_mask_to_weight(self):
         prn.apply_mask_to_weight(self.hooks)
 
+    @staticmethod
+    def apply_zero_weight_to_mask(model : nn.Module):
+        return prn.apply_zero_weight_to_mask(model)
+
     def dump_importance_stat(self, output_dir : str = '', epoch : int = 0):
         prn.dump_importance_stat(self.hooks, output_dir, epoch)
 
