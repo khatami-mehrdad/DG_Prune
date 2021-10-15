@@ -2,7 +2,7 @@
     "Pruner0": 
     {
         "class": "RigL_v2",
-        "rewind_epoch": 0.8,
+        "rewind_epoch": 0.95,
         "num_stages": 5,
         "weights": 
         {
