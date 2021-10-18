@@ -105,6 +105,16 @@ def apply_mask_to_weight(hooks: dict):
     for h in hooks.values():
         h.apply_mask_to_weight( h.module.mask )
 
+def remove_mask_lt_thr(model : nn.Module, thr : float = 0.5):
+    for child in model.children():
+        if isinstance(child, PrunableModule):
+            sparsity = 1 - ( torch.sum(child.mask).item() / child.mask.numel() )
+            if (sparsity < thr):
+                child.mask =  torch.ones_like(child.mask, dtype=torch.int8)
+        else:
+            remove_mask_lt_thr(child, thr)
+    return model
+
 #############################################
 ## Computing Imortance & Applying Sparsity mask
 

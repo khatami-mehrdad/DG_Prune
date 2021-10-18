@@ -59,6 +59,10 @@ class DG_Pruner():
         prn.apply_mask_to_weight(self.hooks)
 
     @staticmethod
+    def remove_mask_lt_thr(model : nn.Module, thr : float = 0.5):
+        return prn.remove_mask_lt_thr(model, thr)
+
+    @staticmethod
     def apply_zero_weight_to_mask(model : nn.Module):
         return prn.apply_zero_weight_to_mask(model)
 

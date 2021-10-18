@@ -3,7 +3,7 @@
     {
         "class": "RigL_v2",
         "rewind_epoch": 0.8,
-        "num_stages": 5,
+        "num_stages": 0,
         "weights": 
         {
             "model.3.conv": 0.8,
