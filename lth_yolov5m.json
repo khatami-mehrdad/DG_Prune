@@ -3,7 +3,7 @@
     {
         "class": "LTH",
         "rewind_epoch": 0.5,
-        "num_stages": 3,
+        "num_stages": 6,
         "weights": 
         {
             "model.3.conv": 0.9,
