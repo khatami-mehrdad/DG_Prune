@@ -120,6 +120,18 @@ class DG_Pruner():
                 self.rewind_checkpoint[state_dict][k] = self.final_checkpoint[state_dict_wMask][k]
         return self.rewind_checkpoint
 
+    def mask_unmasked_checkpoint(self, unmaskedCheckpoint : dict, maskedCheckpoint : dict) -> dict:
+        for k in unmaskedCheckpoint.keys():
+            if k.endswith('mask'):
+                unmaskedCheckpoint[k] = maskedCheckpoint[k]
+        return unmaskedCheckpoint
+
+    def get_final_checkpoint(self) -> dict:
+        return self.final_checkpoint
+    
+    def get_rewind_checkpoint(self) -> dict:
+        return self.rewind_checkpoint
+    
     def sense_done(self) -> int:
         return self.sense_analyzers[list(self.sense_analyzers)[0]].done()
 
