@@ -91,11 +91,12 @@ def create_pruner(pruner_property):
 def apply_pruning_step(epoch: float, pruners: dict, hooks: dict):
     for pruner in pruners.values():
         curr_sparsity, curr_grow = pruner.step_all(epoch)
-        if ( (pruner.stage_cnt >= 0) and (pruner.stage_cnt <= pruner.num_stages) ):
+        if epoch == -1 or ( (pruner.stage_cnt >= 0) and (pruner.stage_cnt <= pruner.num_stages) ):
             for name, sparsity in curr_sparsity.items():
+                
                 hooks[name].apply_mask_to_weight() # in case we regrow, it starts from 0
-                # if (curr_grow[name] > 0):
-                #     hooks[name].apply_mask_to_growth()
+                if (curr_grow[name] > 0): # so the already unmasked ones don't get picked for regrow
+                    hooks[name].apply_mask_to_growth()  # should be done before apply_sparsity 
 
                 hooks[name].apply_sparsity( sparsity )
                 if (curr_grow[name] > 0):
@@ -140,7 +141,7 @@ def apply_global_sparsity(hooks : dict, sparsity : float):
     apply_global_importance_thr(hooks, thr)
 
 def compute_sparsity_table_from_layer(hooks : dict, layer_name : str, sparsity : float):
-    avg_imp = compute_avg_importance_from_sprasity(hooks[layer_name], sparsity)
+    avg_imp = hooks[layer_name].compute_avg_importance_from_sprasity( sparsity )
     thr_dict = {}
     imp_dict = {}
     sparsity_dict = {}

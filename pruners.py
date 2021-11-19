@@ -15,23 +15,24 @@ class PrunerBase():
 
         self.curr_sparsity = {key:0.0 for key in opt['weights'].keys()}
         self.curr_grow = {key:0.0 for key in opt['weights'].keys()}
-        self.stage_cnt = 0
+        self.stage_cnt = -1
 
     def compute_stage_cnt(self, epoch : float):
-        self.stage_cnt = (epoch - self.opt['starting_epoch']) // self.opt['frequency']
+        if ( epoch >= 0 ):
+            self.stage_cnt = (epoch - self.opt['starting_epoch']) // self.opt['frequency']
 
-    def prune_step(self, final_sparsity: float):
+    def prune_step(self, final_sparsity : float):
         return final_sparsity
 
-    def grow_step(self):
+    def grow_step(self, final_sparsity : float):
         return 0
 
     def step_all(self, epoch: float):
         self.compute_stage_cnt(epoch)
-        if (self.stage_cnt >= 0 and self.stage_cnt <= self.num_stages):
+        if epoch == -1 or (self.stage_cnt >= 0 and self.stage_cnt <= self.num_stages):
             for layer_name, final_sparsity in self.opt['weights'].items():
-                self.curr_sparsity[layer_name] = self.prune_step(final_sparsity)
-                self.curr_grow[layer_name] = self.grow_step()
+                self.curr_sparsity[layer_name] = self.prune_step( final_sparsity )
+                self.curr_grow[layer_name] = self.grow_step( final_sparsity )
         return self.curr_sparsity, self.curr_grow
 
 class AGP(PrunerBase):
@@ -57,9 +58,9 @@ class RigL(PrunerBase):
     def prune_step(self, final_sparsity: float):
         return final_sparsity
     
-    def grow_step(self):
+    def grow_step(self, final_sparsity : float ):
         val =  self.opt['alpha'] * ( (1 + math.cos(self.stage_cnt * math.pi / self.num_stages)) / 2 )
-        return val
+        return val * (1 - final_sparsity)
 
 class RigL_v2(PrunerBase):
     r"""
@@ -68,18 +69,19 @@ class RigL_v2(PrunerBase):
     def __init__(self, opt : dict):
         super().__init__(opt)
         self.exponent = opt['T'] if 'T' in opt.keys() else 1
-        self.max_growth = opt['alpha'] if 'alpha' in opt.keys() else 0.05
+        self.max_growth = opt['alpha'] if 'alpha' in opt.keys() else 0.3
 
     def prune_step(self, final_sparsity: float):
-        growth = self.grow_step()
+        growth = self.grow_step( final_sparsity )
         return final_sparsity + growth
     
-    def grow_step(self):
-        val = self.max_growth * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )       
-        return val
+    def grow_step(self, final_sparsity : float):
+        val = 0 if (self.stage_cnt < 0) else self.max_growth * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.exponent )
+        return val * (1 - final_sparsity)
 
     def compute_stage_cnt(self, epoch : float):
-        self.stage_cnt = self.stage_cnt + 1
+        if ( epoch >= 0 ):
+            self.stage_cnt = self.stage_cnt + 1
 
 class LTH(PrunerBase):
     r"""
