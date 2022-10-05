@@ -147,6 +147,7 @@ class DG_Pruner():
             if write_header:  # first iteration (epoch == 1 can't be used)
                 dw.writeheader()
             dw.writerow(rowd)
+        return rowd
 
 
 
