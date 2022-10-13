@@ -15,7 +15,7 @@ class PrunerBase():
 
         self.curr_sparsity = {key:0.0 for key in opt['weights'].keys()}
         self.curr_grow = {key:0.0 for key in opt['weights'].keys()}
-        self.stage_cnt = -1
+        self.stage_cnt = 0
 
     def compute_stage_cnt(self, epoch : float):
         if ( epoch >= 0 ):
@@ -89,7 +89,7 @@ class LTH(PrunerBase):
     """
     def __init__(self, opt : dict):
         super().__init__(opt)
-        self.starting_sparsity = 0.4
+        self.starting_sparsity = 0.5
         self.exponent = opt['T'] if 'T' in opt.keys() else 2
 
     def prune_step(self, final_sparsity: float):
