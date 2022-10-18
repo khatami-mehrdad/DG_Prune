@@ -209,3 +209,28 @@ def dump_sparsity_stat_mask_base(model : nn.Module, output_dir : str = '', epoch
 def dump_sparsity_stat_weight_base(model : nn.Module, output_dir : str = '', epoch : int = 0):
     sparsity_dict = get_sparsity_stat_weight_base(model)
     dump_json(sparsity_dict, 'weight_sparsity_report_epoch{}.json'.format(epoch), output_dir)
+
+##############################################
+## Test function
+
+def get_module_names(model : nn.Module, module_type, parent_name : str = ''):
+    module_names_list = []
+    for child_name, child in model.named_children():
+        module_name = get_prefix(parent_name) + child_name
+        if isinstance(child, module_type):
+            module_names_list.append(module_name)
+        else:
+            module_names_list.extend( get_module_names(child, module_type, module_name) )
+    return module_names_list
+
+def validate_models(model : nn.Module, model2 : nn.Module):
+    module_names_list = get_module_names(model, nn.Conv2d)
+    for module_name in module_names_list:
+        m = get_module(model, module_name)
+        m2 = get_module(model2, module_name)
+        eq = torch.equal(m.weight, m2.weight)
+        if m.bias != None:
+            eq = eq & torch.equal(m.bias, m2.bias)
+        if not eq:
+            return False
+    return True
