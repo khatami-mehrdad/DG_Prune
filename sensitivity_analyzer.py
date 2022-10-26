@@ -35,7 +35,7 @@ class SenseAnalyzerBase():
 
     def stage_cnt_next(self):
         self.stage_cnt = self.stage_cnt + 1
-        if (self.stage_cnt > self.num_stages):
+        if (self.stage_cnt >= self.num_stages):
             layer_name = self.get_curr_layername()
             self.curr_sparsity[layer_name] = 0
             self.layer_cnt = self.layer_cnt + 1
@@ -56,7 +56,7 @@ class Linear(SenseAnalyzerBase):
         super().__init__(opt)
 
     def step(self, final_sparsity: float):
-        val =  self.starting_sparsity + (final_sparsity - self.starting_sparsity) * (self.stage_cnt / self.num_stages)
+        val =  self.starting_sparsity + (final_sparsity - self.starting_sparsity) * (self.stage_cnt / (self.num_stages - 1))
         return val
 
 class Exponential(SenseAnalyzerBase):
@@ -73,5 +73,5 @@ class Exponential(SenseAnalyzerBase):
     #     return final_sparsity * mult / (math.pow(self.T, self.num_stages) - 1)
 
     def step(self, final_sparsity: float):
-        val =  final_sparsity - final_sparsity * ( (1.0 - (self.stage_cnt / self.num_stages)) ** self.T )
+        val =  final_sparsity - final_sparsity * ( (1.0 - (self.stage_cnt / (self.num_stages - 1))) ** self.T )
         return val
